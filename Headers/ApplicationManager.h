@@ -5,7 +5,7 @@
 #ifndef PROYECTO2PACMAN_APPLICATIONMANAGER_H
 #define PROYECTO2PACMAN_APPLICATIONMANAGER_H
 #define WINDOW_WIDTH 1000
-#define WINDOW_HEIGHT 626
+#define WINDOW_HEIGHT 600
 
 #include "WindowState.h"
 class ApplicationManager {

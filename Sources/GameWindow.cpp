@@ -16,6 +16,7 @@ GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states)
     this->initVariables();
     this->initObjects();
     this->initTextures();
+    this->initTablero();
 }
 
 
@@ -54,7 +55,9 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     if(!target){
         target=this->window;
     }
-
+    this->rectTemp.setPosition(0.f,0.f);
+    rectTemp.setFillColor(sf::Color::Red);
+    this->window->draw(this->rectTemp);
 }
 
 
@@ -80,5 +83,16 @@ void GameWindow::initVariables() {
  */
 void GameWindow::initTextures() {
 //    this->textures->insertNode("PlayerTexture","../Resources/Images/SpaceShipPlayer.png");
+}
+
+void GameWindow::initTablero() {
+    rectTemp=sf::RectangleShape(sf::Vector2f(50.f,50.f));
+    int columns=20;
+    int rows=10;
+    //for(int i=0;i<)
+
+
+
+
 }
 

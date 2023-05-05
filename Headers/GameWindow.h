@@ -9,11 +9,15 @@
 #include "WindowState.h"
 
 class GameWindow : public WindowState {
+private:
     sf::RectangleShape backGround;
     sf::Texture backGroundTexture;
     void initObjects();
     void initVariables();
+    void initTablero();
 
+    sf::RectangleShape rectTemp;
+    Cell** cells;
 
     sf::Clock clock;
     sf::Clock bulletClock;

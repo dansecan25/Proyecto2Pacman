@@ -47,7 +47,7 @@ void MainWindow::stateRender(sf::RenderTarget *target) {
     tempTitle.setPosition(430,170);
     tempTitle.setFont(this->font);
     tempTitle.setCharacterSize(30);
-    tempTitle.setString("SPACE BATTLE");
+    tempTitle.setString("PACMAN");
     tempTitle.setFillColor(sf::Color::White);
 
     target->draw(tempTitle);

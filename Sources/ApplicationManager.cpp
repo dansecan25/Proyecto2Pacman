@@ -76,7 +76,7 @@ void ApplicationManager::update() {
  */
 void ApplicationManager::render() {
     //takes the state that will be rendered
-    this->mainWindow->clear();
+    this->mainWindow->clear(sf::Color::Black);
     this->renderBackgroundGeneral();
     if(!this->states->isEmpty()){ //checks if the stack is not empty
         this->states->peek()->stateRender(this->mainWindow);
@@ -107,14 +107,14 @@ void ApplicationManager::initWindowState() {
  * @brief draws the background for all windows
  */
 void ApplicationManager::renderBackgroundGeneral() {
-    this->mainWindow->draw(this->generalBackGround);
+    //this->mainWindow->draw(this->generalBackGround);
 }
 /**
  * @brief initiates the background texture and shape
  */
 void ApplicationManager::initGeneralBackground() {
-    this->generalBackGround.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT)));
-    //if (!this->generalBackGroundTexture.loadFromFile("../Resources/Images/SpaceBackground.jpg")){
+    //this->generalBackGround.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT)));
+    //if (!this->generalBackGroundTexture.loadFromFile("../Resources/Images/Pacman.jpg")){
     //    exit(50);
     //}
     //this->generalBackGround.setTexture(&this->generalBackGroundTexture);
