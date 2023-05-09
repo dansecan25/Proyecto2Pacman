@@ -5,8 +5,7 @@
 #ifndef PROYECTO2PACMAN_WINDOWSTATE_H
 #define PROYECTO2PACMAN_WINDOWSTATE_H
 #include "../DataStructures/WindowStateStack.h"
-#include "SfmlButton.h"
-#include "Cell.h"
+#include "LevelData.h"
 struct mousePositions{
     int posXi;
     int posYi;

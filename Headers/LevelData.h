@@ -4,13 +4,31 @@
 
 #ifndef PROYECTO2PACMAN_LEVELDATA_H
 #define PROYECTO2PACMAN_LEVELDATA_H
-
+#include "../Headers/Cell.h"
 
 class LevelData {
 public:
-    LevelData();
+    LevelData(sf::RenderWindow* window, Cell** cells, sf::Font * font);
+    void render();
+    void nextLevel();
+    int getLevel() const;
+    void addPts(int value);
+    int getPts();
+
+
 private:
     int level;
+    int pts;
+    Cell** cells;
+    sf::Font font;
+    sf::RenderWindow* window;
+    void renderLevel1(Cell* cellRow);
+    void renderLevel2(Cell* cellRow);
+    void renderLevel3(Cell* cellRow);
+    void renderLevel4(Cell* cellRow);
+    bool inArray(int id, int * arr,int n);
+
+
 
 };
 

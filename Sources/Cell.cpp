@@ -16,7 +16,6 @@ Cell::Cell(float x1, float y1, float x2, float y2, int number,bool obstacle, boo
     this->y2=y2;
 }
 Cell::~Cell(){
-    delete window;
 }
 int Cell::getNumber() const {
     return number;
@@ -64,4 +63,16 @@ float Cell::getX2() const {
 
 float Cell::getY2() const {
     return y2;
+}
+
+Cell::Cell() {
+    this->number=0;
+    this->obstacle=false;
+    this->point=false;
+    this->object="";
+    this->window= nullptr;
+    this->x1=0;
+    this->y1=0;
+    this->x2=0;
+    this->y2=0;
 }

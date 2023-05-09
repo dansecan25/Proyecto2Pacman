@@ -6,11 +6,12 @@
 #define PROYECTO2PACMAN_CELL_H
 
 
-#include <string>
-#include <SFML/Graphics/RenderWindow.hpp>
+#include <iostream>
+#include "SfmlButton.h"
 
 class Cell {
 public:
+    Cell();
     Cell(float x1, float y1, float x2, float y2,int number,bool obstacle, bool point, std::string object, sf::RenderWindow* window);
     ~Cell();
     float getX1() const;

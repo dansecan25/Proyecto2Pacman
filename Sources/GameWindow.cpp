@@ -10,13 +10,13 @@
  * @param states gameStatesStack pointer
  * @param mode int
  */
-GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states)
-        :WindowState(window,states){
-
+GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states):WindowState(window,states){
+    this->initFonts();
     this->initVariables();
     this->initObjects();
     this->initTextures();
     this->initTablero();
+    this->initLevel();
 }
 
 
@@ -24,6 +24,11 @@ GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states)
  * @brief constructor to state GameScreen
  */
 GameWindow::~GameWindow() {
+    // Free memory from cells matrix
+    for (int i = 0; i < 18; i++) {
+        delete[] cells[i];
+    }
+    delete[] cells;
 }
 /**
  * @brief updates the inputs events on the current state of the window
@@ -45,7 +50,15 @@ void GameWindow::stateUpdate(const float& dt) {
     this->updateMousePosScreen();
     this->updateInput(dt);
 
-
+}
+/**
+ * @brief loads the font to the font attribute
+ */
+void GameWindow::initFonts() {
+    if (!this->font.loadFromFile("../Resources/Fonts/arial.ttf"))
+    {
+        exit(200); //200 will be the unique code for this space
+    }
 }
 /**
  * @brief states what will be drawn in the window
@@ -55,12 +68,9 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     if(!target){
         target=this->window;
     }
-    this->rectTemp.setPosition(0.f,0.f);
-    rectTemp.setFillColor(sf::Color::Red);
-    this->window->draw(this->rectTemp);
+    renderHub();
+    this->data->render();
 }
-
-
 
 /**
  * @brief init the background objects, GUI
@@ -86,13 +96,65 @@ void GameWindow::initTextures() {
 }
 
 void GameWindow::initTablero() {
-    rectTemp=sf::RectangleShape(sf::Vector2f(50.f,50.f));
-    int columns=20;
-    int rows=10;
-    //for(int i=0;i<)
+    int columns = 33;
+    int rows = 18;
+    float y = 60;
+    int id = 0;
+
+    // allocate memory for the matrix
+    cells = new Cell*[rows];
+    for (int i = 0; i < rows; i++) {
+        cells[i] = new Cell[columns];
+    }
+
+    //initialize each cell in the matrix
+    for (int i = 0; i < rows; i++) {
+        float x = 0;
+        for (int j = 0; j < columns; j++) {
+            cells[i][j] = Cell(x, y, x+30, y+30, id, false, false, "NONE", window);
+            x += 30;
+            id += 1;
+        }
+        y += 30;
+    }
+    //inits the hub rectangle
+    hub=sf::RectangleShape(sf::Vector2f(1100.f,60.f));//dimensions of hub
 
 
 
+}
 
+void GameWindow::initLevel() {
+    this->data=new LevelData(this->window, this->cells,&this->font);
+}
+
+void GameWindow::renderHub() {
+    this->hub.setPosition(0.f,0.f);
+    this->hub.setFillColor(sf::Color::White);
+    this->window->draw(this->hub);
+    //sets the fonts for the hub texts
+    this->levelText.setFont(this->font);
+    this->lifeText.setFont(this->font);
+    this->ptsText.setFont(this->font);
+    //sets the string of the texts
+    this->levelText.setString("Level: "+std::to_string(this->data->getLevel()));
+    this->lifeText.setString("Life points: "+std::to_string(0));
+    this->ptsText.setString("Points: "+std::to_string(this->data->getPts()));
+    //sets the fill color for the texts
+    this->levelText.setFillColor(sf::Color::Black);
+    this->lifeText.setFillColor(sf::Color::Black);
+    this->ptsText.setFillColor(sf::Color::Black);
+    //sets the char size in the hub
+    this->levelText.setCharacterSize(15);
+    this->lifeText.setCharacterSize(15);
+    this->ptsText.setCharacterSize(15);
+    //sets the position of the texts
+    this->levelText.setPosition(50,20);
+    this->lifeText.setPosition(300,20);
+    this->ptsText.setPosition(700,20);
+    //draws the texts
+    this->window->draw(this->levelText);
+    this->window->draw(this->lifeText);
+    this->window->draw(this->ptsText);
 }
 

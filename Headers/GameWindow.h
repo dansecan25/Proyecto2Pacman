@@ -5,7 +5,6 @@
 #ifndef PROYECTO2PACMAN_GAMEWINDOW_H
 #define PROYECTO2PACMAN_GAMEWINDOW_H
 
-
 #include "WindowState.h"
 
 class GameWindow : public WindowState {
@@ -15,9 +14,18 @@ private:
     void initObjects();
     void initVariables();
     void initTablero();
+    void initFonts();
+    void initLevel();
 
-    sf::RectangleShape rectTemp;
+    void renderHub();
+
+    sf::RectangleShape hub;
     Cell** cells;
+    sf::Font font;
+    LevelData* data;
+    sf::Text levelText;
+    sf::Text lifeText;
+    sf::Text ptsText;
 
     sf::Clock clock;
     sf::Clock bulletClock;
