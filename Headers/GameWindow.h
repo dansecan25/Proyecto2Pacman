@@ -16,6 +16,7 @@ private:
     void initTablero();
     void initFonts();
     void initLevel();
+    void checkForEmpty();
 
     void renderHub();
 
@@ -31,6 +32,12 @@ private:
     sf::Clock bulletClock;
     sf::Clock enemyClock;
     sf::Clock bulletClock2;
+
+    Enemy* enemy1;
+    Enemy* enemy2;
+    Enemy* enemy3;
+    Enemy* enemy4;
+
 
 
     void initTextures();

@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "SfmlButton.h"
+#include "Enemy.h"
 
 class Cell {
 public:

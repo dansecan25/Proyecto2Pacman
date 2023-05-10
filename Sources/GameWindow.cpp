@@ -11,12 +11,12 @@
  * @param mode int
  */
 GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states):WindowState(window,states){
-    this->initFonts();
-    this->initVariables();
-    this->initObjects();
-    this->initTextures();
-    this->initTablero();
-    this->initLevel();
+    this->initFonts(); //inits the font
+    this->initObjects(); //inits backgound
+    this->initTextures(); //nothingf
+    this->initTablero(); //inits cells
+    this->initVariables(); //inits the enemies
+    this->initLevel(); //inits data
 }
 
 
@@ -29,6 +29,11 @@ GameWindow::~GameWindow() {
         delete[] cells[i];
     }
     delete[] cells;
+    delete data;
+    delete enemy1;
+    delete enemy2;
+    delete enemy3;
+    delete enemy4;
 }
 /**
  * @brief updates the inputs events on the current state of the window
@@ -46,6 +51,15 @@ void GameWindow::updateInput(const float &dt) {
             data->nextLevel();
             inputClock.restart();
         }
+        //calculate pathfinding every second and move the enemy
+        int actualLevel=data->getLevel();
+        if(actualLevel==1){
+            //will move 1 enemy
+        }
+    }
+    if(data->getPts()%200==0){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
+        data->resetValues();
+        data->nextLevel();
     }
 
 
@@ -81,6 +95,8 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     }
     renderHub();
     this->data->render();
+    int level = data->getLevel();
+
 }
 
 /**
@@ -96,7 +112,11 @@ void GameWindow::initObjects() {
  * @brief inits the variables
  */
 void GameWindow::initVariables() {
-
+    //gen random cell id and check if it is occupied or not
+    this->enemy1=new Enemy(this->window,"Enemy1",10, nullptr,this->cells);
+    this->enemy2=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
+    this->enemy3=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
+    this->enemy4=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
 
 }
 /**
@@ -122,7 +142,7 @@ void GameWindow::initTablero() {
     for (int i = 0; i < rows; i++) {
         float x = 0;
         for (int j = 0; j < columns; j++) {
-            cells[i][j] = Cell(x, y, x+30, y+30, id, false, false, "NONE", window);
+            cells[i][j] = Cell(x, y, x+30, y+30, id, false, true, "NONE", window);
             x += 30;
             id += 1;
         }
@@ -167,5 +187,9 @@ void GameWindow::renderHub() {
     this->window->draw(this->levelText);
     this->window->draw(this->lifeText);
     this->window->draw(this->ptsText);
+}
+
+void GameWindow::checkForEmpty() {
+
 }
 
