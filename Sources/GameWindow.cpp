@@ -36,6 +36,17 @@ GameWindow::~GameWindow() {
  */
 void GameWindow::updateInput(const float &dt) {
     //add to do something when a key is pressed
+    if(data->getEnd()){
+        this->endState(); //replace to win screen
+    }
+    static sf::Clock inputClock; //prevents key spam
+    if(inputClock.getElapsedTime().asSeconds()>1.0f){
+        if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)){
+            data->resetValues();
+            data->nextLevel();
+            inputClock.restart();
+        }
+    }
 
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){

@@ -14,11 +14,14 @@ public:
     int getLevel() const;
     void addPts(int value);
     int getPts();
+    void resetValues();
+    bool getEnd() const;
 
 
 private:
     int level;
     int pts;
+    bool endState;
     Cell** cells;
     sf::Font font;
     sf::RenderWindow* window;
@@ -27,6 +30,7 @@ private:
     void renderLevel3(Cell* cellRow);
     void renderLevel4(Cell* cellRow);
     bool inArray(int id, int * arr,int n);
+
 
 
 
