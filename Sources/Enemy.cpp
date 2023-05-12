@@ -18,10 +18,11 @@ void Enemy::rePosition(Cell* newCurrent) {
 }
 
 void Enemy::render() {
-    tempEnemy.setPosition(currentCell->getX1(),currentCell->getY1());
-    tempEnemy.setFillColor(sf::Color::Blue);
+    tempEnemy.setPosition(currentCell->getX1()+5,currentCell->getY1()+5);
+    tempEnemy.setFillColor(sf::Color::White);
     tempEnemy.setOutlineThickness(1.f);
-    tempEnemy.setOutlineColor(sf::Color::Blue);
+    tempEnemy.setOutlineColor(sf::Color::White);
+    this->window->draw(this->tempEnemy);
 }
 
 int Enemy::getLife() const {

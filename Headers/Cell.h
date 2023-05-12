@@ -8,7 +8,7 @@
 
 #include <iostream>
 #include "SfmlButton.h"
-#include "Enemy.h"
+
 
 class Cell {
 public:
@@ -20,7 +20,6 @@ public:
     float getX2() const;
     float getY2() const;
     int getNumber() const;
-    void setNumber(int number);
     bool isObstacle() const;
     void setObstacle(bool obstacle);
     bool isPoint() const;

@@ -21,12 +21,8 @@ int Cell::getNumber() const {
     return number;
 }
 
-void Cell::setNumber(int number) {
-    Cell::number = number;
-}
-
 bool Cell::isObstacle() const {
-    return obstacle;
+    return this->obstacle;
 }
 
 void Cell::setObstacle(bool obstacle) {

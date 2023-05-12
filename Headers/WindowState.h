@@ -6,6 +6,9 @@
 #define PROYECTO2PACMAN_WINDOWSTATE_H
 #include "../DataStructures/WindowStateStack.h"
 #include "LevelData.h"
+#include "Enemy.h"
+#include <random>
+
 struct mousePositions{
     int posXi;
     int posYi;

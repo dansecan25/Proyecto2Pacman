@@ -14,7 +14,7 @@ GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states):Windo
     this->initFonts(); //inits the font
     this->initObjects(); //inits backgound
     this->initTextures(); //nothingf
-    this->initTablero(); //inits cells
+    this->initBoard(); //inits cells
     this->initVariables(); //inits the enemies
     this->initLevel(); //inits data
 }
@@ -45,10 +45,11 @@ void GameWindow::updateInput(const float &dt) {
         this->endState(); //replace to win screen
     }
     static sf::Clock inputClock; //prevents key spam
-    if(inputClock.getElapsedTime().asSeconds()>1.0f){
+    if(inputClock.getElapsedTime().asSeconds()>0.5f){
         if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::G)){
             data->resetValues();
             data->nextLevel();
+            this->reposition=true;
             inputClock.restart();
         }
         //calculate pathfinding every second and move the enemy
@@ -57,10 +58,10 @@ void GameWindow::updateInput(const float &dt) {
             //will move 1 enemy
         }
     }
-    if(data->getPts()%200==0){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
-        data->resetValues();
-        data->nextLevel();
-    }
+    //if(data->getPts()%200==0){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
+    //    data->resetValues();
+    //    data->nextLevel();
+    //}
 
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
@@ -96,6 +97,47 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     renderHub();
     this->data->render();
     int level = data->getLevel();
+    if(level==1){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+    }else if(level==2){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+    }else if(level==3){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->enemy3->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+        this->enemy3->render();
+    }else if(level==4){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->enemy3->rePosition(checkForEmpty());
+            this->enemy4->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+        this->enemy3->render();
+        this->enemy4->render();
+    }
 
 }
 
@@ -112,11 +154,12 @@ void GameWindow::initObjects() {
  * @brief inits the variables
  */
 void GameWindow::initVariables() {
+    this->reposition=true; //true so when the game starts, it repositions only once the enemies
     //gen random cell id and check if it is occupied or not
-    this->enemy1=new Enemy(this->window,"Enemy1",10, nullptr,this->cells);
-    this->enemy2=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
-    this->enemy3=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
-    this->enemy4=new Enemy(this->window,"Enemy2",10, nullptr,this->cells);
+    this->enemy1=new Enemy(this->window,"Enemy1",10, checkForEmpty(),this->cells);
+    this->enemy2=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
+    this->enemy3=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
+    this->enemy4=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
 
 }
 /**
@@ -125,8 +168,10 @@ void GameWindow::initVariables() {
 void GameWindow::initTextures() {
 //    this->textures->insertNode("PlayerTexture","../Resources/Images/SpaceShipPlayer.png");
 }
-
-void GameWindow::initTablero() {
+/**
+ * @brief initiates the matrix of cells in the board
+ */
+void GameWindow::initBoard() {
     int columns = 33;
     int rows = 18;
     float y = 60;
@@ -154,11 +199,15 @@ void GameWindow::initTablero() {
 
 
 }
-
+/**
+ * @brief defines the data variable with the data of the game
+ */
 void GameWindow::initLevel() {
     this->data=new LevelData(this->window, this->cells,&this->font);
 }
-
+/**
+ * @brief renders the hub with texts and the rectangle
+ */
 void GameWindow::renderHub() {
     this->hub.setPosition(0.f,0.f);
     this->hub.setFillColor(sf::Color::White);
@@ -188,8 +237,29 @@ void GameWindow::renderHub() {
     this->window->draw(this->lifeText);
     this->window->draw(this->ptsText);
 }
+/**
+ * @brief generates a random id number of a cell that has NONE item on it and is as far as posible from the player
+ */
+Cell* GameWindow::checkForEmpty() {
+    std::random_device rd;  // Obtain a random seed from the hardware
+    std::mt19937 gen(rd());  // Seed the random number generator
 
-void GameWindow::checkForEmpty() {
+    std::uniform_int_distribution<int> distribution(0, 593);  // Define the range of random numbers
 
+    int randomNumber = distribution(gen);  // Generate a random number
+    //checks if the number is with object NONE if not, generates a new number
+    int rows=18;
+    int columns =33;
+    for (int i =0;i<rows;i++){
+        for(int j =0;j<columns;j++){
+            if(cells[i][j].getNumber()==randomNumber){
+                if(cells[i][j].getObject()=="NONE" && !cells[i][j].isObstacle()){
+                    return &cells[i][j];
+                }else{
+                    return checkForEmpty(); //if the cell is not empty or is an obstacle, do it again
+                }
+            }
+        }
+    }
 }
 

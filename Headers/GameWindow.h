@@ -13,10 +13,10 @@ private:
     sf::Texture backGroundTexture;
     void initObjects();
     void initVariables();
-    void initTablero();
+    void initBoard();
     void initFonts();
     void initLevel();
-    void checkForEmpty();
+    Cell* checkForEmpty();
 
     void renderHub();
 
@@ -37,6 +37,8 @@ private:
     Enemy* enemy2;
     Enemy* enemy3;
     Enemy* enemy4;
+
+    bool reposition;
 
 
 
