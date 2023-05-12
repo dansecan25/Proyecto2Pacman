@@ -16,6 +16,7 @@ public:
     int getPts();
     void resetValues();
     bool getEnd() const;
+    Cell* findCell(int number);
 
 
 private:

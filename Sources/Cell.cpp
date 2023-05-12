@@ -14,6 +14,8 @@ Cell::Cell(float x1, float y1, float x2, float y2, int number,bool obstacle, boo
     this->y1=y1;
     this->x2=x2;
     this->y2=y2;
+    this->manhattan=0;
+    this->heuristic=0;
 }
 Cell::~Cell(){
 }
@@ -71,4 +73,20 @@ Cell::Cell() {
     this->y1=0;
     this->x2=0;
     this->y2=0;
+}
+
+int Cell::getManhattan() const {
+    return this->manhattan;
+}
+
+void Cell::setManhattan(int manhattan) {
+    this->manhattan = manhattan;
+}
+
+int Cell::getHeuristic() const {
+    return this->heuristic;
+}
+
+void Cell::setHeuristic(int heuristic) {
+    this->heuristic = heuristic;
 }

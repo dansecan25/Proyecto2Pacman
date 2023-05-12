@@ -33,10 +33,18 @@ private:
     sf::Clock enemyClock;
     sf::Clock bulletClock2;
 
+    PathFinding* pathFinding1;
+    PathFinding* pathFinding2;
+    PathFinding* pathFinding3;
+    PathFinding* pathFinding4;
+
     Enemy* enemy1;
     Enemy* enemy2;
     Enemy* enemy3;
     Enemy* enemy4;
+
+    IntegerLinkedList* path;
+    int pathSize;
 
     bool reposition;
 

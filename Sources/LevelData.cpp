@@ -266,3 +266,16 @@ void LevelData::resetValues() {
 bool LevelData::getEnd() const {
     return this->endState;
 }
+
+Cell *LevelData::findCell(int number) {
+    int rows=18;
+    int columns=33;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<columns;j++){
+            if(number==cells[i][j].getNumber()){
+                return &cells[i][j];
+            }
+        }
+    }
+    return nullptr;
+}

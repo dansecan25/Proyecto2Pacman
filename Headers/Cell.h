@@ -8,6 +8,7 @@
 
 #include <iostream>
 #include "SfmlButton.h"
+#include "PathFinding.h"
 
 
 class Cell {
@@ -26,6 +27,10 @@ public:
     void setPoint(bool point);
     const std::string &getObject() const;
     void setObject(const std::string &object);
+    int getManhattan() const;
+    void setManhattan(int manhattan);
+    int getHeuristic() const;
+    void setHeuristic(int heuristic);
 
 private:
     int number;
@@ -37,6 +42,9 @@ private:
     float y1;
     float x2;
     float y2;
+    int manhattan;
+    int heuristic; //value of the cost of movement + the id
+
 
 
 };

@@ -24,7 +24,10 @@ void Enemy::render() {
     tempEnemy.setOutlineColor(sf::Color::White);
     this->window->draw(this->tempEnemy);
 }
-
+/**
+ * @brief gets the enemies hitpoints
+ * @return int
+ */
 int Enemy::getLife() const {
     return life;
 }
@@ -35,4 +38,8 @@ const std::string &Enemy::getName() const {
 
 Cell *Enemy::getCurrentCell() const {
     return currentCell;
+}
+
+int Enemy::getPosNumber() {
+    return this->currentCell->getNumber();
 }

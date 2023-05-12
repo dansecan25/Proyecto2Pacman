@@ -9,16 +9,19 @@
 
 class PathFinding {
 public:
-    int sideMove;
-    int diagonal;
-
     PathFinding();
+    ~PathFinding();
     int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
+    IntegerLinkedList* calculatePath(Cell** cells, int positionNumber, int destinationNumber);
 private:
     IntegerLinkedList* openList;
     IntegerLinkedList* closedList;
     IntegerLinkedList* route;
+    int sideMove;
+    int diagonal;
+    Cell** cells;
 
+    void assignManhattan(int destination, int start);
 
 };
 

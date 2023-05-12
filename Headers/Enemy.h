@@ -15,13 +15,11 @@ public:
     int getLife() const;
     const std::string &getName() const;
     Cell *getCurrentCell() const;
+    int getPosNumber();
 
 private:
     int life;
     std::string name;
-
-
-private:
     sf::RenderWindow* window;
     Cell* currentCell;
     sf::RectangleShape tempEnemy;
