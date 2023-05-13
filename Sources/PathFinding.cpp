@@ -11,6 +11,8 @@ PathFinding::PathFinding() {
     this->closedList=new IntegerLinkedList();
     this->route=new IntegerLinkedList();
     this->cells= nullptr;
+    this->objectiveCol=0;
+    this->objectiveRow=0;
 }
 
 int PathFinding::manhattanDistance(int posObjectiveRow, int posObjectiveColumn, int posObjectRow, int posObjectColumn) {
@@ -20,8 +22,12 @@ int PathFinding::manhattanDistance(int posObjectiveRow, int posObjectiveColumn, 
 IntegerLinkedList *PathFinding::calculatePath(Cell **cells, int positionNumber, int destinationNumber) {
     //firstly assign manhattan distance to all cells
     this->cells=cells;
-    assignManhattan(destinationNumber,positionNumber);
-    return nullptr;
+    setObjectivePositions(destinationNumber); //sets where is the objective
+    assignManhattan(destinationNumber,positionNumber); //assigns manhatan to all cells
+    //calculates the value for all cells
+
+    //calculates the route
+    return route;
 }
 
 PathFinding::~PathFinding() {
@@ -44,8 +50,25 @@ void PathFinding::assignManhattan(int destination, int start) {
     int columns=33;
     for(int i=0;i<rows;i++){
         for(int j=0;j<columns;j++){
-
-            //cells[i][j].setManhattan(manhattanDistance())
+            cells[i][j].setManhattan(manhattanDistance(objectiveRow,this->objectiveCol,i,j));
         }
     }
+}
+
+void PathFinding::setObjectivePositions(int id) {
+    int rows=18;
+    int columns=33;
+    for(int i=0;i<rows;i++){
+        for(int j=0;j<columns;j++){
+            if(cells[i][j].getNumber()==id){
+                this->objectiveCol=j;
+                this->objectiveRow=i;
+                return;
+            }
+        }
+    }
+}
+
+void PathFinding::calcCost(int destination, int start) {
+
 }

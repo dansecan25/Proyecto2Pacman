@@ -6,6 +6,7 @@
 #define PROYECTDATOS2_SFMLBUTTON_H
 #include <SFML/Graphics.hpp>
 
+
 enum buttonStates{BTNidle=0,BTNhover,BTNpressed};
 class SfmlButton {
 

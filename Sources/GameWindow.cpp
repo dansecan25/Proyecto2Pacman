@@ -68,7 +68,7 @@ void GameWindow::updateInput(const float &dt) {
             //returns the path to follow
             path=pathFinding1->calculatePath(cells,this->enemy1->getPosNumber(),99);
             //will move 1 enemy
-            this->enemy1->rePosition(this->data->findCell(this->path->getInt(0))); //reasigns the cell location in the new position given
+            //this->enemy1->rePosition(this->data->findCell(this->path->getInt(0))); //reasigns the cell location in the new position given
         }
         moveCLock.restart();
     }
@@ -169,6 +169,7 @@ void GameWindow::initObjects() {
  */
 void GameWindow::initVariables() {
     this->path=new IntegerLinkedList();
+    this->pathSize=0;
     this->pathFinding1=new PathFinding();
     this->pathFinding2=new PathFinding();
     this->pathFinding3=new PathFinding();
@@ -281,5 +282,6 @@ Cell* GameWindow::checkForEmpty() {
             }
         }
     }
+    return nullptr;
 }
 

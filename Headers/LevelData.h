@@ -4,8 +4,8 @@
 
 #ifndef PROYECTO2PACMAN_LEVELDATA_H
 #define PROYECTO2PACMAN_LEVELDATA_H
-#include "../Headers/Cell.h"
 
+#include "PathFinding.h"
 class LevelData {
 public:
     LevelData(sf::RenderWindow* window, Cell** cells, sf::Font * font);

@@ -11,7 +11,7 @@ class PathFinding {
 public:
     PathFinding();
     ~PathFinding();
-    int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
+    static int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
     IntegerLinkedList* calculatePath(Cell** cells, int positionNumber, int destinationNumber);
 private:
     IntegerLinkedList* openList;
@@ -21,7 +21,11 @@ private:
     int diagonal;
     Cell** cells;
 
+    int objectiveCol;
+    int objectiveRow;
+    void setObjectivePositions(int id);
     void assignManhattan(int destination, int start);
+    void calcCost(int destination,int start);
 
 };
 
