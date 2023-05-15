@@ -22,6 +22,7 @@ public:
     void insertNode(int data);
     int getInt(int pos);
     void deleteNode(int pos);
+    void deleteData(int data);
     int getLen();
     void deleteLast();
 private:

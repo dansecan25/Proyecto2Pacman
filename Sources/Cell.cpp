@@ -4,7 +4,7 @@
 
 #include "../Headers/Cell.h"
 
-Cell::Cell(float x1, float y1, float x2, float y2, int number,bool obstacle, bool point, std::string object, sf::RenderWindow* window) {
+Cell::Cell(float x1, float y1, float x2, float y2, int number,bool obstacle, bool point, std::string object, sf::RenderWindow* window,int col, int row) {
     this->number=number;
     this->obstacle=obstacle;
     this->point=point;
@@ -16,6 +16,9 @@ Cell::Cell(float x1, float y1, float x2, float y2, int number,bool obstacle, boo
     this->y2=y2;
     this->manhattan=0;
     this->heuristic=0;
+    this->col=col;
+    this->row=row;
+    this->pastCost=0;
 }
 Cell::~Cell(){
 }
@@ -89,4 +92,20 @@ int Cell::getHeuristic() const {
 
 void Cell::setHeuristic(int heuristic) {
     this->heuristic = heuristic;
+}
+
+int Cell::getCol() const {
+    return col;
+}
+
+int Cell::getRow() const {
+    return row;
+}
+
+int Cell::getPastCost() const {
+    return this->pastCost;
+}
+
+void Cell::setPastCost(int pastCost) {
+    this->pastCost=pastCost;
 }

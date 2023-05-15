@@ -61,7 +61,7 @@ void GameWindow::updateInput(const float &dt) {
 
     }
     static sf::Clock moveCLock;
-    if(moveCLock.getElapsedTime().asSeconds()>0.1f){
+    if(moveCLock.getElapsedTime().asSeconds()>10.0f){
         int actualLevel=data->getLevel();
         if(actualLevel==1){
             //calculates the path for the enemy
@@ -208,7 +208,7 @@ void GameWindow::initBoard() {
     for (int i = 0; i < rows; i++) {
         float x = 0;
         for (int j = 0; j < columns; j++) {
-            cells[i][j] = Cell(x, y, x+30, y+30, id, false, true, "NONE", window);
+            cells[i][j] = Cell(x, y, x+30, y+30, id, false, true, "NONE", window,j,i);
             x += 30;
             id += 1;
         }

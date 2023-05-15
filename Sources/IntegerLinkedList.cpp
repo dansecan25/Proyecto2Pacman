@@ -2,6 +2,7 @@
 // Created by dansecan on 11/05/23.
 //
 
+#include <iostream>
 #include "../DataStructures/IntegerLinkedList.h"
 /**
  * @brief constructor for the node
@@ -67,7 +68,7 @@ int IntegerLinkedList::getInt(int pos) {
     IntegerNode* temp;
     temp=head;
     int count=0;
-    if(pos<=len){
+    if(pos>=this->len||pos<0){
         return -10;
     }else{
         while(count!= pos){
@@ -136,6 +137,34 @@ void IntegerLinkedList::deleteLast() {
             }
             temp1=nextTemp;
             nextTemp=nextTemp->getNext();
+        }
+    }
+}
+/**
+ * @brief deletes a specific position
+ * @param data
+ */
+void IntegerLinkedList::deleteData(int data) {
+    IntegerNode * temp1=head,*temp2= head;
+    if(len==0) {
+        len=0;
+        return;
+    }else if(getInt(0)==data){//if the position is the head
+        head=head->getNext();
+        delete temp1;
+        len--;
+        return;
+    }else{
+        for(int i=0; i<len;i++){
+            if(getInt(i)==data){
+                temp2->setNext(temp1->getNext());
+                delete temp1;
+                len--;
+                break;
+            }else{
+                temp2=temp1;
+                temp1=temp1->getNext();
+            }
         }
     }
 }

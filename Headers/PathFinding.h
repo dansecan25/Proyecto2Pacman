@@ -1,12 +1,15 @@
 //
-// Created by dansecan on 11/05/23.
-//
 
 #ifndef PROYECTO2PACMAN_PATHFINDING_H
 #define PROYECTO2PACMAN_PATHFINDING_H
 #include "Cell.h"
 #include "../DataStructures/IntegerLinkedList.h"
 
+#endif //PROYECTO2PACMAN_PATHFINDING_H
+
+
+//
+// Created by dansecan on 11/05/23.
 class PathFinding {
 public:
     PathFinding();
@@ -26,8 +29,16 @@ private:
     void setObjectivePositions(int id);
     void assignManhattan(int destination, int start);
     void calcCost(int destination,int start);
-
+    Cell* getCell(int id);
+    int moveNext();
+    void printLists();
+    void cleanLists();
+    bool inClosed(int value);
+    bool inOpen(int value);
+    IntegerLinkedList* getAdyacents(int value);
+    int findNextInAdyacents(IntegerLinkedList* adyacents);
+    void setRoute(int start, int end);
+    void printRoute();
+    void printAdyacents(IntegerLinkedList* list);
+    bool inList(IntegerLinkedList* list,int value);
 };
-
-
-#endif //PROYECTO2PACMAN_PATHFINDING_H

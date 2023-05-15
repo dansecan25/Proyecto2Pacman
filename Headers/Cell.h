@@ -14,7 +14,7 @@
 class Cell {
 public:
     Cell();
-    Cell(float x1, float y1, float x2, float y2,int number,bool obstacle, bool point, std::string object, sf::RenderWindow* window);
+    Cell(float x1, float y1, float x2, float y2,int number,bool obstacle, bool point, std::string object, sf::RenderWindow* window, int col, int row);
     ~Cell();
     float getX1() const;
     float getY1() const;
@@ -31,11 +31,15 @@ public:
     void setManhattan(int manhattan);
     int getHeuristic() const;
     void setHeuristic(int heuristic);
+    int getCol() const;
+    int getRow() const;
 
 private:
     int number;
     bool obstacle;
     bool point;
+    int col;
+    int row;
     std::string object;
     sf::RenderWindow* window;
     float x1;
@@ -44,7 +48,11 @@ private:
     float y2;
     int manhattan;
     int heuristic; //value of the cost of movement + the id
+    int pastCost;
+public:
+    int getPastCost() const;
 
+    void setPastCost(int pastCost);
 
 
 };
