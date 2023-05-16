@@ -61,14 +61,18 @@ void GameWindow::updateInput(const float &dt) {
 
     }
     static sf::Clock moveCLock;
-    if(moveCLock.getElapsedTime().asSeconds()>10.0f){
+    if(moveCLock.getElapsedTime().asSeconds()>1.0f){
         int actualLevel=data->getLevel();
         if(actualLevel==1){
+            if(path->getLen()!=0){
+                pathFinding1->cleanLists();
+            }
             //calculates the path for the enemy
             //returns the path to follow
             path=pathFinding1->calculatePath(cells,this->enemy1->getPosNumber(),99);
+
             //will move 1 enemy
-            //this->enemy1->rePosition(this->data->findCell(this->path->getInt(0))); //reasigns the cell location in the new position given
+            this->enemy1->rePosition(this->data->findCell(path->getInt(1))); //reasigns the cell location in the new position given
         }
         moveCLock.restart();
     }

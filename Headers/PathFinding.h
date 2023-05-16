@@ -16,6 +16,7 @@ public:
     ~PathFinding();
     static int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
     IntegerLinkedList* calculatePath(Cell** cells, int positionNumber, int destinationNumber);
+    void cleanLists();
 private:
     IntegerLinkedList* openList;
     IntegerLinkedList* closedList;
@@ -32,7 +33,6 @@ private:
     Cell* getCell(int id);
     int moveNext();
     void printLists();
-    void cleanLists();
     bool inClosed(int value);
     bool inOpen(int value);
     IntegerLinkedList* getAdyacents(int value);

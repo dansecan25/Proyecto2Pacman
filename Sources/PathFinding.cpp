@@ -30,8 +30,6 @@ IntegerLinkedList *PathFinding::calculatePath(Cell **cells, int positionNumber, 
     //calculates the route
     setRoute(positionNumber,destinationNumber);
     //printRoute();
-    //cleansthelists
-    cleanLists();
     return route;
 }
 
@@ -209,6 +207,9 @@ void PathFinding::cleanLists() {
             cells[i][j].setHeuristic(0);
         }
 
+    }
+    while(route->getLen()>0){
+        route->deleteLast();
     }
 }
 
