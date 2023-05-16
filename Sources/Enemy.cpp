@@ -4,10 +4,10 @@
 
 #include "../Headers/Enemy.h"
 
-Enemy::Enemy(sf::RenderWindow *window, std::string name, int lifePts, Cell *currentCell,Cell **cells) {
+Enemy::Enemy(sf::RenderWindow *window, std::string name, bool alive, Cell *currentCell,Cell **cells) {
     this->window=window;
     this->name=name;
-    this->life=lifePts;
+    this->alive=alive;
     this->currentCell=currentCell;
     this->tempEnemy=sf::RectangleShape(sf::Vector2f(20,20));
     this->cells=cells;
@@ -25,11 +25,11 @@ void Enemy::render() {
     this->window->draw(this->tempEnemy);
 }
 /**
- * @brief gets the enemies hitpoints
- * @return int
+ * @brief gets the enemies life state
+ * @return bool
  */
-int Enemy::getLife() const {
-    return life;
+bool Enemy::getLife() {
+    return alive;
 }
 
 const std::string &Enemy::getName() const {
@@ -42,4 +42,8 @@ Cell *Enemy::getCurrentCell() const {
 
 int Enemy::getPosNumber() {
     return this->currentCell->getNumber();
+}
+
+void Enemy::setAlive(bool alive) {
+    this->alive = alive;
 }

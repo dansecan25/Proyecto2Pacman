@@ -17,6 +17,7 @@ public:
     void resetValues();
     bool getEnd() const;
     Cell* findCell(int number);
+    bool pointsAreEaten();
 
 
 private:
@@ -31,6 +32,7 @@ private:
     void renderLevel3(Cell* cellRow);
     void renderLevel4(Cell* cellRow);
     bool inArray(int id, int * arr,int n);
+    void renderPoints();
 
 
 

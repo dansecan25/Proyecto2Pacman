@@ -24,6 +24,9 @@ GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states):Windo
  * @brief constructor to state GameScreen
  */
 GameWindow::~GameWindow() {
+    this->pathFinding1->cleanLists();
+    this->pathFinding2->cleanLists();
+
     // Free memory from cells matrix
     for (int i = 0; i < 18; i++) {
         delete[] cells[i];
@@ -40,8 +43,7 @@ GameWindow::~GameWindow() {
     delete this->path4;
     delete this->pathFinding1;
     delete this->pathFinding2;
-    delete this->pathFinding3;
-    delete this->pathFinding4;
+
 }
 /**
  * @brief updates the inputs events on the current state of the window
@@ -63,12 +65,11 @@ void GameWindow::updateInput(const float &dt) {
             }
             if(this->data->getLevel()==3){
                 pathFinding1->cleanLists();
-                pathFinding2->cleanLists();
+
             }
             if(this->data->getLevel()==4){
                 pathFinding1->cleanLists();
                 pathFinding2->cleanLists();
-                pathFinding3->cleanLists();
             }
             this->turn=0;
             inputClock.restart();
@@ -80,73 +81,103 @@ void GameWindow::updateInput(const float &dt) {
     if(moveCLock.getElapsedTime().asSeconds()>1.0f){
         int actualLevel=data->getLevel();
         //when 6 turns have passed, reset turn counter
-        if(actualLevel>=1){
-            if((path1->getLen()<=0|| this->turn>=path1->getLen()-1)&& this->turn!=0){
-                this->endState();
-            }else if(path1->getLen()!=0&&this->turn==15){
-                pathFinding1->cleanLists();
-                this->turn=0; //if reached the maximum turns
+        if(enemy1->getLife()){
+            if(actualLevel>=1){
+                if((path1->getLen()<=0|| this->turn>=path1->getLen()-1)&& this->turn!=0){
+                    this->endState();
+                }else if(path1->getLen()!=0&&this->turn>=15){
+                    pathFinding1->cleanLists();
+                    this->turn=0; //if reached the maximum turns
+                }
             }
         }
-        if(actualLevel>=2){
-            if((path2->getLen()<=0|| this->turn>=path2->getLen()-1 )&& this->turn!=0){
-                this->endState();
-            }else if(path2->getLen()!=0&&this->turn==15){
-                pathFinding2->cleanLists();
-                this->turn=0; //if path is empty, reset turn counter
+        if(enemy2->getLife()){
+            if(actualLevel>=2){
+                if(actualLevel==2){
+                    //do what bactracking needs
+                }else{
+                    if((path2->getLen()<=0|| this->turn>=path2->getLen()-1 )&& this->turn!=0){
+                        this->endState();
+                    }else if(path2->getLen()!=0&&this->turn>=15){
+                        pathFinding2->cleanLists();
+                        this->turn=0; //if path is empty, reset turn counter
+                    }
+                }
             }
         }
-        if(actualLevel>=3){
-            if((path3->getLen()<=0|| this->turn>=path3->getLen()-1 )&& this->turn!=0){
-                this->endState();
-            }else if(path3->getLen()!=0&&this->turn==15){
-                pathFinding3->cleanLists();
-                this->turn=0; //if path is empty, reset turn counter
+        if(enemy3->getLife()){
+            if(actualLevel>=3){
+                //do something else
             }
         }
-        if(actualLevel>=4){
-            if((path4->getLen()<=0|| this->turn>=path4->getLen()-1 )&& this->turn!=0){
-                this->endState();
-            }else if(path4->getLen()!=0&&this->turn==15){
-                pathFinding4->cleanLists();
-                this->turn=0; //if path is empty, reset turn counter
+        if(enemy4->getLife()){
+            if(actualLevel>=4){
+                //do something else
             }
         }
         if(this->turn==0) {
-            if (actualLevel >=1) {
-                path1 = pathFinding1->calculatePath(this->enemy1->getPosNumber(), 99);
+            if(enemy1->getLife()) {
+                if (actualLevel >= 1) {
+                    path1 = pathFinding1->calculatePath(this->enemy1->getPosNumber(), 99);
+                }
             }
-            if(actualLevel>=2){
-                path2 = pathFinding2->calculatePath(this->enemy2->getPosNumber(), 99);
+            if(enemy2->getLife()){
+                if(actualLevel>=2){
+                    if(actualLevel==2){
+                        //the paths is backtracking made
+                    }else{
+                        path2 = pathFinding2->calculatePath(this->enemy2->getPosNumber(), 99);
+                    }
+                }
             }
-            if(actualLevel>=3){
-                path3 = pathFinding3->calculatePath(this->enemy3->getPosNumber(), 99);
+            if(enemy4->getLife()) {
+                if (actualLevel >= 3) {
+                    //change it to backtracking
+                    //path3 = pathFinding3->calculatePath(this->enemy3->getPosNumber(), 99);
+                }
             }
-            if(actualLevel>=4){
-                path4 = pathFinding3->calculatePath(this->enemy4->getPosNumber(), 99);
+            if(enemy4->getLife()) {
+                if (actualLevel >= 4) {
+                    //change it to backtracking
+                    //path4 = pathFinding3->calculatePath(this->enemy4->getPosNumber(), 99);
+                }
             }
         }
         //will move 1 enemy
-        if (actualLevel >= 1) {
-            this->enemy1->rePosition(this->data->findCell(path1->getInt(turn + 1))); //reasigns the cell location in the new position given
+        if(enemy1->getLife()) {
+            if (actualLevel >= 1) {
+                Cell *cellToMove = this->data->findCell(path1->getInt(turn + 1));
+                this->enemy1->rePosition(cellToMove); //reasigns the cell location in the new position given
+
+            }
         }
-        if(actualLevel>=2){
-            this->enemy2->rePosition(this->data->findCell(path2->getInt(turn + 1))); //reasigns the cell location in the new position given
+        if(enemy2->getLife()) {
+            if (actualLevel >= 2) {
+                if (actualLevel == 2) {
+
+                } else {
+                    this->enemy2->rePosition(this->data->findCell(
+                            path2->getInt(turn + 1))); //reasigns the cell location in the new position given
+                }
+            }
         }
-        if(actualLevel>=3){
-            this->enemy3->rePosition(this->data->findCell(path3->getInt(turn + 1))); //reasigns the cell location in the new position given
+        if(enemy3->getLife()) {
+            if (actualLevel >= 3) {
+                //this->enemy3->rePosition(this->data->findCell(path3->getInt(turn + 1))); //reasigns the cell location in the new position given
+            }
         }
-        if(actualLevel>=4){
-            this->enemy4->rePosition(this->data->findCell(path4->getInt(turn + 1))); //reasigns the cell location in the new position given
-            std::cout<<this->data->findCell(path4->getInt(turn + 1))<<std::endl;
+        if(enemy4->getLife()) {
+            if (actualLevel >= 4) {
+                //this->enemy4->rePosition(this->data->findCell(path4->getInt(turn + 1))); //reasigns the cell location in the new position given
+            }
         }
         this->turn+=1;
         moveCLock.restart();
     }
-    //if(data->getPts()%200==0){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
-    //    data->resetValues();
-    //    data->nextLevel();
-    //}
+    if(data->pointsAreEaten()){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
+        data->resetValues();
+        data->nextLevel();
+    }
 
 
     if(sf::Keyboard::isKeyPressed(sf::Keyboard::Key::Escape)){
@@ -184,49 +215,7 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     }
     renderHub(); //renders the hub
     this->data->render(); //renders the obstacles in and points in the
-    int level = data->getLevel();
-    //draws the enemies on the board depending on the level
-    if(level==1){
-        if(this->reposition){
-            this->enemy1->rePosition(checkForEmpty());
-            this->reposition=false;
-        }
-        this->enemy1->render();
-    }else if(level==2){
-        if(this->reposition){
-            this->enemy1->rePosition(checkForEmpty());
-            this->enemy2->rePosition(checkForEmpty());
-            this->reposition=false;
-        }
-
-        this->enemy1->render();
-        this->enemy2->render();
-    }else if(level==3){
-        if(this->reposition){
-            this->enemy1->rePosition(checkForEmpty());
-            this->enemy2->rePosition(checkForEmpty());
-            this->enemy3->rePosition(checkForEmpty());
-            this->reposition=false;
-        }
-
-        this->enemy1->render();
-        this->enemy2->render();
-        this->enemy3->render();
-    }else if(level==4){
-        if(this->reposition){
-            this->enemy1->rePosition(checkForEmpty());
-            this->enemy2->rePosition(checkForEmpty());
-            this->enemy3->rePosition(checkForEmpty());
-            this->enemy4->rePosition(checkForEmpty());
-            this->reposition=false;
-        }
-
-        this->enemy1->render();
-        this->enemy2->render();
-        this->enemy3->render();
-        this->enemy4->render();
-    }
-
+    renderEnemies();
 }
 
 /**
@@ -251,15 +240,14 @@ void GameWindow::initVariables() {
     this->pathSize=0;
     this->pathFinding1=new PathFinding(cells);
     this->pathFinding2=new PathFinding(cells);
-    this->pathFinding3=new PathFinding(cells);
-    this->pathFinding4=new PathFinding(cells);
+
 
     this->reposition=true; //true so when the game starts, it repositions only once the enemies
     //gen random cell id and check if it is occupied or not
-    this->enemy1=new Enemy(this->window,"Enemy1",10, checkForEmpty(),this->cells);
-    this->enemy2=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
-    this->enemy3=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
-    this->enemy4=new Enemy(this->window,"Enemy2",10, checkForEmpty(),this->cells);
+    this->enemy1=new Enemy(this->window,"Enemy1",true, checkForEmpty(),this->cells);
+    this->enemy2=new Enemy(this->window,"Enemy2",true, checkForEmpty(),this->cells);
+    this->enemy3=new Enemy(this->window,"Enemy2",true, checkForEmpty(),this->cells);
+    this->enemy4=new Enemy(this->window,"Enemy2",true, checkForEmpty(),this->cells);
 
 }
 /**
@@ -345,7 +333,7 @@ Cell* GameWindow::checkForEmpty() {
     std::mt19937 gen(rd());  // Seed the random number generator
 
     std::uniform_int_distribution<int> distribution(0, 593);  // Define the range of random numbers
-
+    
     int randomNumber = distribution(gen);  // Generate a random number
     //checks if the number is with object NONE if not, generates a new number
     int rows=18;
@@ -362,5 +350,52 @@ Cell* GameWindow::checkForEmpty() {
         }
     }
     return nullptr;
+}
+/**
+ * @brief renders the enemies by level
+ */
+void GameWindow::renderEnemies() {
+    int level = data->getLevel();
+    //draws the enemies on the board depending on the level
+    if(level==1){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+        this->enemy1->render();
+    }else if(level==2){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+    }else if(level==3){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->enemy3->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+        this->enemy3->render();
+    }else if(level==4){
+        if(this->reposition){
+            this->enemy1->rePosition(checkForEmpty());
+            this->enemy2->rePosition(checkForEmpty());
+            this->enemy3->rePosition(checkForEmpty());
+            this->enemy4->rePosition(checkForEmpty());
+            this->reposition=false;
+        }
+
+        this->enemy1->render();
+        this->enemy2->render();
+        this->enemy3->render();
+        this->enemy4->render();
+    }
 }
 

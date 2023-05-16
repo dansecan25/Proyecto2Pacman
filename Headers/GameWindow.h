@@ -16,6 +16,7 @@ private:
     void initBoard();
     void initFonts();
     void initLevel();
+    void renderEnemies();
     Cell* checkForEmpty();
 
     void renderHub();
@@ -35,8 +36,7 @@ private:
 
     PathFinding* pathFinding1;
     PathFinding* pathFinding2;
-    PathFinding* pathFinding3;
-    PathFinding* pathFinding4;
+
 
     Enemy* enemy1;
     Enemy* enemy2;

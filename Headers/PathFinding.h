@@ -12,7 +12,7 @@ class PathFinding {
 public:
     explicit PathFinding(Cell** cells);
     ~PathFinding();
-    static int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
+    int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
     IntegerLinkedList* calculatePath(int positionNumber, int destinationNumber);
     void cleanLists();
 private:

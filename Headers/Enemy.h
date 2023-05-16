@@ -9,17 +9,21 @@
 
 class Enemy {
 public:
-    Enemy(sf::RenderWindow* window,std::string name,int lifePts,Cell* currentCell,Cell **cells);
+    Enemy(sf::RenderWindow* window,std::string name,bool alive,Cell* currentCell,Cell **cells);
     void rePosition(Cell* newCurrent);
     void render();
-    int getLife() const;
+    bool getLife();
     const std::string &getName() const;
     Cell *getCurrentCell() const;
     int getPosNumber();
 
 private:
-    int life;
+    bool alive;
     std::string name;
+public:
+    void setAlive(bool alive);
+
+private:
     sf::RenderWindow* window;
     Cell* currentCell;
     sf::RectangleShape tempEnemy;

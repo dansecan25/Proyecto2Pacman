@@ -34,6 +34,7 @@ void LevelData::render() {
         }
 
     }
+    renderPoints();
 }
 /**
  * @brief changes the level value to the next one
@@ -238,29 +239,8 @@ void LevelData::renderLevel4(Cell *cellRow) {
             rect.setOutlineThickness(1.f);
             rect.setOutlineColor(sf::Color(51,255,0));
             cellRow[j].setObstacle(true);
+            cellRow[j].setPoint(false);
             this->window->draw(rect);
-        }else{
-            sf::Text idText=sf::Text();
-            idText.setFont(font);
-            idText.setString(std::to_string(cellRow[j].getNumber()));
-            idText.setCharacterSize(8);
-            idText.setPosition(cellRow[j].getX1(),cellRow[j].getY1());
-            idText.setFillColor(sf::Color::White);
-            this->window->draw(idText);
-            sf::Text manhattan=sf::Text();
-            manhattan.setFont(font);
-            manhattan.setString(std::to_string(cellRow[j].getManhattan()));
-            manhattan.setCharacterSize(8);
-            manhattan.setPosition(cellRow[j].getX2()-10,cellRow[j].getY1());
-            manhattan.setFillColor(sf::Color::White);
-            this->window->draw(manhattan);
-            sf::Text costText=sf::Text();
-            costText.setFont(font);
-            costText.setString(std::to_string(cellRow[j].getHeuristic()));
-            costText.setCharacterSize(8);
-            costText.setPosition(cellRow[j].getX1()+5,cellRow[j].getY2()-10);
-            costText.setFillColor(sf::Color::White);
-            this->window->draw(costText);
         }
 
     }
@@ -287,7 +267,11 @@ void LevelData::resetValues() {
 bool LevelData::getEnd() const {
     return this->endState;
 }
-
+/**
+ * @brief finds a cell in the cells
+ * @param number int
+ * @return Cell*
+ */
 Cell *LevelData::findCell(int number) {
     int rows=18;
     int columns=33;
@@ -299,4 +283,35 @@ Cell *LevelData::findCell(int number) {
         }
     }
     return nullptr;
+}
+/**
+ * @brief draws the points on screen
+ */
+void LevelData::renderPoints() {
+    for (int i = 0; i < 18; i++) {
+        for (int j = 0; j < 33; j++) {
+            if(cells[i][j].isPoint()){
+                sf::CircleShape circle(3);
+                circle.setFillColor(sf::Color::Yellow);
+                circle.setOutlineThickness(1.f);
+                circle.setOutlineColor(sf::Color::Yellow);
+                circle.setPosition(cells[i][j].getX1() + 12, cells[i][j].getY1() + 12);
+                this->window->draw(circle);
+            }
+        }
+    }
+}
+/**
+ * @nbrief indicates if thera are points on screen or no
+ * @return
+ */
+bool LevelData::pointsAreEaten() {
+    for (int i = 0; i < 18; i++) {
+        for (int j = 0; j < 33; j++) {
+            if(cells[i][j].isPoint()){
+                return false;
+            }
+        }
+    }
+    return true;
 }

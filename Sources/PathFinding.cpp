@@ -46,16 +46,12 @@ IntegerLinkedList *PathFinding::calculatePath(int positionNumber, int destinatio
 }
 
 PathFinding::~PathFinding() {
-    while(openList->getLen()!=0){
-        openList->deleteLast();
-    }
-    delete this->openList;
-    while(closedList->getLen()!=0){
-        closedList->deleteLast();
-    }
-    delete this->closedList;
 }
-
+/**
+ * @brief assigns manhattan to the cells
+ * @param destination int
+ * @param start int
+ */
 void PathFinding::assignManhattan(int destination, int start) {
     int rows=18;
     int columns=33;
@@ -65,7 +61,10 @@ void PathFinding::assignManhattan(int destination, int start) {
         }
     }
 }
-
+/**
+ * @brief sets the col and row locations for the end cell for using in manhattan
+ * @param id int
+ */
 void PathFinding::setObjectivePositions(int id) {
     int rows=18;
     int columns=33;
@@ -79,7 +78,11 @@ void PathFinding::setObjectivePositions(int id) {
         }
     }
 }
-
+/**
+ * @brief calculates the heuristic for all cells
+ * @param destination int
+ * @param start int
+ */
 void PathFinding::calcCost(int destination, int start) {
     if(this->openList->getLen()>0 ||this->closedList->getLen()>0 ||this->route->getLen()>0 ){
         cleanLists();
@@ -152,7 +155,11 @@ void PathFinding::calcCost(int destination, int start) {
     }
 
 }
-
+/**
+ * @brief finds the cell in the matrix
+ * @param id int
+ * @return Cell*
+ */
 Cell *PathFinding::getCell(int id) {
     int rows=18;
     int columns=33;
@@ -165,7 +172,10 @@ Cell *PathFinding::getCell(int id) {
     }
     return nullptr;
 }
-
+/**
+ * @brief seacrhes the the cell in open list with the least cost
+ * @return int
+ */
 int PathFinding::moveNext() {
     int nextCell=openList->getInt(0);
     for(int i=0;i<openList->getLen();i++){
@@ -177,7 +187,9 @@ int PathFinding::moveNext() {
     }
     return nextCell;
 }
-
+/**
+ * @brief prints openlist and closed list
+ */
 void PathFinding::printLists() {
     std::cout<<"Open List: ";
     if(openList->getLen()!=0){
@@ -196,7 +208,9 @@ void PathFinding::printLists() {
 
 
 }
-
+/**
+ * @brief delets data in the closed and open list and route
+ */
 void PathFinding::cleanLists() {
     if(openList->getLen()!=0 && closedList->getLen()!=0){
         while(openList->getLen()>0){
@@ -219,7 +233,11 @@ void PathFinding::cleanLists() {
         route->deleteLast();
     }
 }
-
+/**
+ * @brief checks if a value is in the closed list
+ * @param value int
+ * @return true if it is, false if not
+ */
 bool PathFinding::inClosed(int value) {
     for(int i=0;i<closedList->getLen();i++){
         if(closedList->getInt(i)==value){
@@ -228,7 +246,11 @@ bool PathFinding::inClosed(int value) {
     }
     return false;
 }
-
+/**
+ * @brief checks if a value is in the open list
+ * @param value int
+ * @return true if it is, false if not
+ */
 bool PathFinding::inOpen(int value) {
     for(int i=0;i<openList->getLen();i++){
         if(openList->getInt(i)==value){
@@ -237,7 +259,11 @@ bool PathFinding::inOpen(int value) {
     }
     return false;
 }
-
+/**
+ * @brief gets the cells that are adyacent to the current cell
+ * @param value int
+ * @return IntegerLinkedList*
+ */
 IntegerLinkedList *PathFinding::getAdyacents(int value) {
     int columns=33;
     int rows=18;
@@ -361,7 +387,11 @@ IntegerLinkedList *PathFinding::getAdyacents(int value) {
     }
     return adyacents;
 }
-
+/**
+ * @brief finds the next adyacent with the least cost
+ * @param adyacents IntegerLinkedList*
+ * @return int
+ */
 int PathFinding::findNextInAdyacents(IntegerLinkedList *adyacents) {
     Cell* nextCell=getCell(adyacents->getInt(0));
     for(int i=0;i<adyacents->getLen();i++){
@@ -372,7 +402,9 @@ int PathFinding::findNextInAdyacents(IntegerLinkedList *adyacents) {
     }
     return nextCell->getNumber();
 }
-
+/**
+ * @brief sets the path found
+ */
 void PathFinding::setRoute(int start, int end) {
     route->insertNode(start);
     int endId=closedList->getInt(closedList->getLen()-1);
@@ -431,7 +463,9 @@ void PathFinding::setRoute(int start, int end) {
 
 
 }
-
+/**
+ * @brief prints the route
+ */
 void PathFinding::printRoute() {
     std::cout<<"Route: ";
     for(int i=0;i<route->getLen();i++){
@@ -440,14 +474,22 @@ void PathFinding::printRoute() {
     std::cout<<" "<<std::endl;
 
 }
-
+/**
+ * @brief prints the adyacents
+ * @param list IntegerLinkedList *
+ */
 void PathFinding::printAdyacents(IntegerLinkedList *list) {
     for(int i=0;i<list->getLen();i++){
         std::cout<<list->getInt(i)<<", ";
     }
     std::cout<<" "<<std::endl;
 }
-
+/**
+ * @brief checks if the element is in a list
+ * @param list IntegerLinkedList *
+ * @param value int
+ * @return bool
+ */
 bool PathFinding::inList(IntegerLinkedList *list,int value) {
     for(int i=0;i<list->getLen();i++){
         if(list->getInt(i)==value){
