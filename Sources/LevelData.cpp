@@ -117,29 +117,6 @@ void LevelData::renderLevel1(Cell *cellRow) {
             cellRow[j].setObstacle(true);
             cellRow[j].setPoint(false);
             this->window->draw(rect);
-        }else{
-            sf::Text idText=sf::Text();
-            idText.setFont(font);
-            idText.setString(std::to_string(cellRow[j].getNumber()));
-            idText.setCharacterSize(8);
-            idText.setPosition(cellRow[j].getX1(),cellRow[j].getY1());
-            idText.setFillColor(sf::Color::White);
-            this->window->draw(idText);
-            sf::Text manhattan=sf::Text();
-            manhattan.setFont(font);
-            manhattan.setString(std::to_string(cellRow[j].getManhattan()));
-            manhattan.setCharacterSize(8);
-            manhattan.setPosition(cellRow[j].getX2()-10,cellRow[j].getY1());
-            manhattan.setFillColor(sf::Color::White);
-            this->window->draw(manhattan);
-            sf::Text costText=sf::Text();
-            costText.setFont(font);
-            costText.setString(std::to_string(cellRow[j].getHeuristic()));
-            costText.setCharacterSize(8);
-            costText.setPosition(cellRow[j].getX1()+5,cellRow[j].getY2()-10);
-            costText.setFillColor(sf::Color::White);
-            this->window->draw(costText);
-
         }
 
     }
@@ -262,6 +239,28 @@ void LevelData::renderLevel4(Cell *cellRow) {
             rect.setOutlineColor(sf::Color(51,255,0));
             cellRow[j].setObstacle(true);
             this->window->draw(rect);
+        }else{
+            sf::Text idText=sf::Text();
+            idText.setFont(font);
+            idText.setString(std::to_string(cellRow[j].getNumber()));
+            idText.setCharacterSize(8);
+            idText.setPosition(cellRow[j].getX1(),cellRow[j].getY1());
+            idText.setFillColor(sf::Color::White);
+            this->window->draw(idText);
+            sf::Text manhattan=sf::Text();
+            manhattan.setFont(font);
+            manhattan.setString(std::to_string(cellRow[j].getManhattan()));
+            manhattan.setCharacterSize(8);
+            manhattan.setPosition(cellRow[j].getX2()-10,cellRow[j].getY1());
+            manhattan.setFillColor(sf::Color::White);
+            this->window->draw(manhattan);
+            sf::Text costText=sf::Text();
+            costText.setFont(font);
+            costText.setString(std::to_string(cellRow[j].getHeuristic()));
+            costText.setCharacterSize(8);
+            costText.setPosition(cellRow[j].getX1()+5,cellRow[j].getY2()-10);
+            costText.setFillColor(sf::Color::White);
+            this->window->draw(costText);
         }
 
     }
@@ -273,10 +272,9 @@ void LevelData::renderLevel4(Cell *cellRow) {
 void LevelData::resetValues() {
     for (int i = 0; i < 18; i++) {
         for (int j = 0; j < 33; j++) {
-            Cell cellSpace=cells[i][j];
-            cellSpace.setObstacle(false);
-            cellSpace.setPoint(true);
-            cellSpace.setObject("None");
+            cells[i][j].setObstacle(false);
+            cells[i][j].setPoint(true);
+            cells[i][j].setObject("NONE");
         }
     }
 

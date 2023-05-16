@@ -34,7 +34,10 @@ GameWindow::~GameWindow() {
     delete this->enemy2;
     delete this->enemy3;
     delete this->enemy4;
-    delete this->path;
+    delete this->path1;
+    delete this->path2;
+    delete this->path3;
+    delete this->path4;
     delete this->pathFinding1;
     delete this->pathFinding2;
     delete this->pathFinding3;
@@ -55,6 +58,19 @@ void GameWindow::updateInput(const float &dt) {
             data->resetValues();
             data->nextLevel();
             this->reposition=true;
+            if(this->data->getLevel()==2){
+                pathFinding1->cleanLists();
+            }
+            if(this->data->getLevel()==3){
+                pathFinding1->cleanLists();
+                pathFinding2->cleanLists();
+            }
+            if(this->data->getLevel()==4){
+                pathFinding1->cleanLists();
+                pathFinding2->cleanLists();
+                pathFinding3->cleanLists();
+            }
+            this->turn=0;
             inputClock.restart();
         }
         //calculate pathfinding every second and move the enemy
@@ -63,17 +79,68 @@ void GameWindow::updateInput(const float &dt) {
     static sf::Clock moveCLock;
     if(moveCLock.getElapsedTime().asSeconds()>1.0f){
         int actualLevel=data->getLevel();
-        if(actualLevel==1){
-            if(path->getLen()!=0){
+        //when 6 turns have passed, reset turn counter
+        if(actualLevel>=1){
+            if((path1->getLen()<=0|| this->turn>=path1->getLen()-1)&& this->turn!=0){
+                this->endState();
+            }else if(path1->getLen()!=0&&this->turn==15){
                 pathFinding1->cleanLists();
+                this->turn=0; //if reached the maximum turns
             }
-            //calculates the path for the enemy
-            //returns the path to follow
-            path=pathFinding1->calculatePath(cells,this->enemy1->getPosNumber(),99);
-
-            //will move 1 enemy
-            this->enemy1->rePosition(this->data->findCell(path->getInt(1))); //reasigns the cell location in the new position given
         }
+        if(actualLevel>=2){
+            if((path2->getLen()<=0|| this->turn>=path2->getLen()-1 )&& this->turn!=0){
+                this->endState();
+            }else if(path2->getLen()!=0&&this->turn==15){
+                pathFinding2->cleanLists();
+                this->turn=0; //if path is empty, reset turn counter
+            }
+        }
+        if(actualLevel>=3){
+            if((path3->getLen()<=0|| this->turn>=path3->getLen()-1 )&& this->turn!=0){
+                this->endState();
+            }else if(path3->getLen()!=0&&this->turn==15){
+                pathFinding3->cleanLists();
+                this->turn=0; //if path is empty, reset turn counter
+            }
+        }
+        if(actualLevel>=4){
+            if((path4->getLen()<=0|| this->turn>=path4->getLen()-1 )&& this->turn!=0){
+                this->endState();
+            }else if(path4->getLen()!=0&&this->turn==15){
+                pathFinding4->cleanLists();
+                this->turn=0; //if path is empty, reset turn counter
+            }
+        }
+        if(this->turn==0) {
+            if (actualLevel >=1) {
+                path1 = pathFinding1->calculatePath(this->enemy1->getPosNumber(), 99);
+            }
+            if(actualLevel>=2){
+                path2 = pathFinding2->calculatePath(this->enemy2->getPosNumber(), 99);
+            }
+            if(actualLevel>=3){
+                path3 = pathFinding3->calculatePath(this->enemy3->getPosNumber(), 99);
+            }
+            if(actualLevel>=4){
+                path4 = pathFinding3->calculatePath(this->enemy4->getPosNumber(), 99);
+            }
+        }
+        //will move 1 enemy
+        if (actualLevel >= 1) {
+            this->enemy1->rePosition(this->data->findCell(path1->getInt(turn + 1))); //reasigns the cell location in the new position given
+        }
+        if(actualLevel>=2){
+            this->enemy2->rePosition(this->data->findCell(path2->getInt(turn + 1))); //reasigns the cell location in the new position given
+        }
+        if(actualLevel>=3){
+            this->enemy3->rePosition(this->data->findCell(path3->getInt(turn + 1))); //reasigns the cell location in the new position given
+        }
+        if(actualLevel>=4){
+            this->enemy4->rePosition(this->data->findCell(path4->getInt(turn + 1))); //reasigns the cell location in the new position given
+            std::cout<<this->data->findCell(path4->getInt(turn + 1))<<std::endl;
+        }
+        this->turn+=1;
         moveCLock.restart();
     }
     //if(data->getPts()%200==0){ //hacer funcion que revise si ya se recogieron todos los puntos &&allCollected
@@ -111,6 +178,9 @@ void GameWindow::initFonts() {
 void GameWindow::stateRender(sf::RenderTarget * target) {
     if(!target){
         target=this->window;
+    }
+    if(getQuit()){
+        return;
     }
     renderHub(); //renders the hub
     this->data->render(); //renders the obstacles in and points in the
@@ -172,12 +242,17 @@ void GameWindow::initObjects() {
  * @brief inits the variables
  */
 void GameWindow::initVariables() {
-    this->path=new IntegerLinkedList();
+    this->path1=new IntegerLinkedList();
+    this->path2=new IntegerLinkedList();
+    this->path3=new IntegerLinkedList();
+    this->path4=new IntegerLinkedList();
+
+    this->turn=0;
     this->pathSize=0;
-    this->pathFinding1=new PathFinding();
-    this->pathFinding2=new PathFinding();
-    this->pathFinding3=new PathFinding();
-    this->pathFinding4=new PathFinding();
+    this->pathFinding1=new PathFinding(cells);
+    this->pathFinding2=new PathFinding(cells);
+    this->pathFinding3=new PathFinding(cells);
+    this->pathFinding4=new PathFinding(cells);
 
     this->reposition=true; //true so when the game starts, it repositions only once the enemies
     //gen random cell id and check if it is occupied or not

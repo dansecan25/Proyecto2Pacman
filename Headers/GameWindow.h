@@ -43,10 +43,17 @@ private:
     Enemy* enemy3;
     Enemy* enemy4;
 
-    IntegerLinkedList* path;
+    IntegerLinkedList* path1;
+    IntegerLinkedList* path2;
+    IntegerLinkedList* path3;
+    IntegerLinkedList* path4;
+
+    int turn;
+
     int pathSize;
 
     bool reposition;
+
 
 
 

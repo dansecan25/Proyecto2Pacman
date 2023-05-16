@@ -5,24 +5,21 @@
 #include "Cell.h"
 #include "../DataStructures/IntegerLinkedList.h"
 
-#endif //PROYECTO2PACMAN_PATHFINDING_H
-
-
 //
 // Created by dansecan on 11/05/23.
+//
 class PathFinding {
 public:
-    PathFinding();
+    explicit PathFinding(Cell** cells);
     ~PathFinding();
     static int manhattanDistance(int posObjectiveRow, int posObjectiveColumn,int posObjectRow, int posObjectColumn);
-    IntegerLinkedList* calculatePath(Cell** cells, int positionNumber, int destinationNumber);
+    IntegerLinkedList* calculatePath(int positionNumber, int destinationNumber);
     void cleanLists();
 private:
     IntegerLinkedList* openList;
     IntegerLinkedList* closedList;
     IntegerLinkedList* route;
     int sideMove;
-    int diagonal;
     Cell** cells;
 
     int objectiveCol;
@@ -39,6 +36,7 @@ private:
     int findNextInAdyacents(IntegerLinkedList* adyacents);
     void setRoute(int start, int end);
     void printRoute();
-    void printAdyacents(IntegerLinkedList* list);
-    bool inList(IntegerLinkedList* list,int value);
+    static void printAdyacents(IntegerLinkedList* list);
+    static bool inList(IntegerLinkedList* list,int value);
 };
+#endif //PROYECTO2PACMAN_PATHFINDING_H

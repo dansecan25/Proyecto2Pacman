@@ -126,17 +126,16 @@ void IntegerLinkedList::deleteLast() {
         delete temp1;
         len--;
     }else{
+        IntegerNode* nextTemp;
         while(temp1!= nullptr){
-            IntegerNode* nextTemp=temp1->getNext();
+            nextTemp=temp1->getNext();
             if(nextTemp->getNext()== nullptr){
-                temp1->setNext(nextTemp->getNext());
-                nextTemp->setNext(nullptr);
+                temp1->setNext(nullptr);
                 delete nextTemp;
                 len--;
                 return;
             }
             temp1=nextTemp;
-            nextTemp=nextTemp->getNext();
         }
     }
 }

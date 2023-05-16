@@ -76,6 +76,11 @@ Cell::Cell() {
     this->y1=0;
     this->x2=0;
     this->y2=0;
+    this->manhattan=0;
+    this->heuristic=0;
+    this->pastCost=0;
+    this->col=0;
+    this->row=0;
 }
 
 int Cell::getManhattan() const {

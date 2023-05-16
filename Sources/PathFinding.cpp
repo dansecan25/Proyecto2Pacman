@@ -4,32 +4,44 @@
 
 #include "../Headers/PathFinding.h"
 
-PathFinding::PathFinding() {
+PathFinding::PathFinding(Cell** cells) {
     this->sideMove=10;
-    this->diagonal=100000;
     this->openList=new IntegerLinkedList();
     this->closedList=new IntegerLinkedList();
     this->route=new IntegerLinkedList();
-    this->cells= nullptr;
+    this->cells= cells;
     this->objectiveCol=0;
     this->objectiveRow=0;
 }
-
+/**
+ * @brief calculates the manhattan distance
+ * @param posObjectiveRow int
+ * @param posObjectiveColumn int
+ * @param posObjectRow int
+ * @param posObjectColumn int
+ * @return int
+ */
 int PathFinding::manhattanDistance(int posObjectiveRow, int posObjectiveColumn, int posObjectRow, int posObjectColumn) {
     return abs(posObjectRow - posObjectiveRow) + abs(posObjectColumn - posObjectiveColumn);
 }
-
-IntegerLinkedList *PathFinding::calculatePath(Cell **cells, int positionNumber, int destinationNumber) {
+/**
+ * @brief calculates the pathfinding algorithm
+ * @param positionNumber int
+ * @param destinationNumber int
+ * @return IntegerLinkedList*
+ */
+IntegerLinkedList *PathFinding::calculatePath(int positionNumber, int destinationNumber) {
     //firstly assign manhattan distance to all cells
-    this->cells=cells;
     setObjectivePositions(destinationNumber); //sets where is the objective
     assignManhattan(destinationNumber,positionNumber); //assigns manhatan to all cells
     //calculates the value for all cells
+    std::cout<<"Position: "<<positionNumber<<std::endl;
+    printLists();
     calcCost(destinationNumber,positionNumber);
     //printLists();
     //calculates the route
     setRoute(positionNumber,destinationNumber);
-    //printRoute();
+    printRoute();
     return route;
 }
 
@@ -42,10 +54,6 @@ PathFinding::~PathFinding() {
         closedList->deleteLast();
     }
     delete this->closedList;
-    while(route->getLen()!=0){
-        route->deleteLast();
-    }
-    delete this->route;
 }
 
 void PathFinding::assignManhattan(int destination, int start) {
@@ -73,25 +81,27 @@ void PathFinding::setObjectivePositions(int id) {
 }
 
 void PathFinding::calcCost(int destination, int start) {
+    if(this->openList->getLen()>0 ||this->closedList->getLen()>0 ||this->route->getLen()>0 ){
+        cleanLists();
+    }
     int currentID=start;
     openList->insertNode(currentID);
     int columns=33;
     int rows=18;
-    auto currentCell= getCell(currentID);
-    int c=0;
+    Cell* currentCell= getCell(currentID);
     //printLists();
     while(true){ //goes through all the cells until it reaches the end
         //check if manhattan is 0
         if(currentCell->getManhattan()<=1){
             closedList->insertNode(currentID);
             openList->deleteData(currentID);
-            //std::cout<<"0 REACHED"<<std::endl;
             break;
         }
+        //std::cout<<"ID in loop: "<<currentID<<std::endl;
         //gets the adyacents of each cell
         IntegerLinkedList* tempAdyacents=getAdyacents(currentID);
         //std::cout<<"Adyacents of "<<currentID<<" :";
-        IntegerLinkedList* adyacents=new IntegerLinkedList();
+        auto* adyacents=new IntegerLinkedList();
         //if adyacents are in open list or in closed list, discard those
         for(int i=0;i<tempAdyacents->getLen();i++){
             if(!inOpen(tempAdyacents->getInt(i))&&!inClosed(tempAdyacents->getInt(i))){
@@ -139,9 +149,6 @@ void PathFinding::calcCost(int destination, int start) {
         }
         currentID=moveNext();
         currentCell=getCell(currentID);
-
-//        std::cout<<"current exec: "<<c<<std::endl;
-//        c++;
     }
 
 }
@@ -164,7 +171,7 @@ int PathFinding::moveNext() {
     for(int i=0;i<openList->getLen();i++){
         auto currentCell=getCell(openList->getInt(i));
         auto leastCell=getCell(nextCell);
-        if(currentCell->getHeuristic()<leastCell->getHeuristic()){
+        if(currentCell->getHeuristic()<=leastCell->getHeuristic()){
             nextCell=openList->getInt(i);
         }
     }
@@ -234,7 +241,7 @@ bool PathFinding::inOpen(int value) {
 IntegerLinkedList *PathFinding::getAdyacents(int value) {
     int columns=33;
     int rows=18;
-    IntegerLinkedList* adyacents=new IntegerLinkedList();
+    auto* adyacents=new IntegerLinkedList();
     Cell* currentCell=getCell(value);
     int i=currentCell->getRow();
     int j=currentCell->getCol();
@@ -370,7 +377,7 @@ void PathFinding::setRoute(int start, int end) {
     route->insertNode(start);
     int endId=closedList->getInt(closedList->getLen()-1);
     int currentID=start;
-    IntegerLinkedList* visitedNodes=new IntegerLinkedList();
+    auto* visitedNodes=new IntegerLinkedList();
     //loop while true
     while(route->getLen()!=0&&route->getInt(route->getLen() - 1) != endId) {
         //ends if the current id is the end of the closed list
@@ -385,7 +392,7 @@ void PathFinding::setRoute(int start, int end) {
         //gets the adyacents of each cell
         IntegerLinkedList* tempAdyacents=getAdyacents(currentID);
         //std::cout<<"Adyacents of "<<currentID<<" :";
-        IntegerLinkedList* adyacents=new IntegerLinkedList();
+        auto* adyacents=new IntegerLinkedList();
         //if adyacents are in open list, discard those
         for(int i=0;i<tempAdyacents->getLen();i++){
             if(inClosed(tempAdyacents->getInt(i))&&!inList(visitedNodes,tempAdyacents->getInt(i))){//if its in the closed list
