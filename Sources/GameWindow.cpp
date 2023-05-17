@@ -15,8 +15,9 @@ GameWindow::GameWindow(sf::RenderWindow* window, WindowStateStack* states):Windo
     this->initObjects(); //inits backgound
     this->initTextures(); //nothingf
     this->initBoard(); //inits cells
-    this->initVariables(); //inits the enemies
     this->initLevel(); //inits data
+    this->initVariables(); //inits the enemiesd
+
 }
 
 
@@ -28,9 +29,6 @@ GameWindow::~GameWindow() {
     this->pathFinding2->cleanLists();
 
     // Free memory from cells matrix
-    for (int i = 0; i < 18; i++) {
-        delete[] cells[i];
-    }
     delete[] cells;
     delete this->data;
     delete this->enemy1;
@@ -43,6 +41,7 @@ GameWindow::~GameWindow() {
     delete this->path4;
     delete this->pathFinding1;
     delete this->pathFinding2;
+    delete this->pacman;
 
 }
 /**
@@ -79,13 +78,25 @@ void GameWindow::updateInput(const float &dt) {
     }
     static sf::Clock moveCLock;
     if(moveCLock.getElapsedTime().asSeconds()>1.0f){
+        std::cout<<"Pacman pos: "<<pacman->getId()<<std::endl;
+        std::cout<<"Last pos: "<<path1->getInt(path1->getLen()-2)<<std::endl;
         int actualLevel=data->getLevel();
         //when 6 turns have passed, reset turn counter
         if(enemy1->getLife()){
             if(actualLevel>=1){
                 if((path1->getLen()<=0|| this->turn>=path1->getLen()-1)&& this->turn!=0){
-                    this->endState();
+                    if(pacman->getLives()>=1){
+                        pacman->gotHit();
+                        pacman->renderCharacter();
+                        pathFinding1->cleanLists();
+                        this->turn=0; //if path is empty, reset turn counter
+                    }else{
+                        this->endState();
+                    }
                 }else if(path1->getLen()!=0&&this->turn>=15){
+                    pathFinding1->cleanLists();
+                    this->turn=0; //if reached the maximum turns
+                }else if(path1->getInt(path1->getLen()-2)!=pacman->getId()-1){
                     pathFinding1->cleanLists();
                     this->turn=0; //if reached the maximum turns
                 }
@@ -97,10 +108,20 @@ void GameWindow::updateInput(const float &dt) {
                     //do what bactracking needs
                 }else{
                     if((path2->getLen()<=0|| this->turn>=path2->getLen()-1 )&& this->turn!=0){
-                        this->endState();
+                        if(pacman->getLives()>=1){
+                            pacman->gotHit();
+                            pacman->renderCharacter();
+                            pathFinding2->cleanLists();
+                            this->turn=0; //if path is empty, reset turn counter
+                        }else{
+                            this->endState();
+                        }
                     }else if(path2->getLen()!=0&&this->turn>=15){
                         pathFinding2->cleanLists();
                         this->turn=0; //if path is empty, reset turn counter
+                    }else if(path2->getInt(path1->getLen()-2)!=pacman->getId()-1){
+                        pathFinding2->cleanLists();
+                        this->turn=0; //if reached the maximum turns
                     }
                 }
             }
@@ -118,7 +139,7 @@ void GameWindow::updateInput(const float &dt) {
         if(this->turn==0) {
             if(enemy1->getLife()) {
                 if (actualLevel >= 1) {
-                    path1 = pathFinding1->calculatePath(this->enemy1->getPosNumber(), 99);
+                    path1 = pathFinding1->calculatePath(this->enemy1->getPosNumber(), pacman->getId());
                 }
             }
             if(enemy2->getLife()){
@@ -126,7 +147,7 @@ void GameWindow::updateInput(const float &dt) {
                     if(actualLevel==2){
                         //the paths is backtracking made
                     }else{
-                        path2 = pathFinding2->calculatePath(this->enemy2->getPosNumber(), 99);
+                        path2 = pathFinding2->calculatePath(this->enemy2->getPosNumber(), pacman->getId());
                     }
                 }
             }
@@ -216,6 +237,7 @@ void GameWindow::stateRender(sf::RenderTarget * target) {
     renderHub(); //renders the hub
     this->data->render(); //renders the obstacles in and points in the
     renderEnemies();
+    renderPlayer();
 }
 
 /**
@@ -235,6 +257,9 @@ void GameWindow::initVariables() {
     this->path2=new IntegerLinkedList();
     this->path3=new IntegerLinkedList();
     this->path4=new IntegerLinkedList();
+
+    this->hola=false;
+    this->pacman=new Character(hola,this->cells,this->data);
 
     this->turn=0;
     this->pathSize=0;
@@ -306,9 +331,9 @@ void GameWindow::renderHub() {
     this->ptsText.setFont(this->font);
     //sets the string of the texts
     this->levelText.setString("Level: "+std::to_string(this->data->getLevel()));
-    this->lifeText.setString("Life points: "+std::to_string(0));
+    this->lifeText.setString("Life points: "+std::to_string(this->pacman->getLives()));
     this->ptsText.setString("Points: "+std::to_string(this->data->getPts()));
-    //sets the fill color for the texts
+    //sets the fill color for the textsd
     this->levelText.setFillColor(sf::Color::Black);
     this->lifeText.setFillColor(sf::Color::Black);
     this->ptsText.setFillColor(sf::Color::Black);
@@ -397,5 +422,12 @@ void GameWindow::renderEnemies() {
         this->enemy3->render();
         this->enemy4->render();
     }
+}
+
+void GameWindow::renderPlayer() {
+    this->pacman->renderCharacter();
+    this->pacman->moveCharacter();
+    this->window->draw(pacman->spriteCharacter);
+
 }
 

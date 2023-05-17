@@ -18,6 +18,7 @@ private:
     void initLevel();
     void renderEnemies();
     Cell* checkForEmpty();
+    void renderPlayer();
 
     void renderHub();
 
@@ -48,6 +49,8 @@ private:
     IntegerLinkedList* path3;
     IntegerLinkedList* path4;
 
+    Character* pacman;
+    bool hola;
     int turn;
 
     int pathSize;

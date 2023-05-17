@@ -2,7 +2,7 @@
 // Created by dansecan on 26/03/23.
 //
 
-#include "../../Proyecto2Pacman/Headers/SfmlButton.h"
+#include "../Headers/SfmlButton.h"
 
 SfmlButton::SfmlButton(float x, float y, float width, float height, sf::Font * font, std::string text,
                        sf::Color idleC, sf::Color hoverC, sf::Color activeC){

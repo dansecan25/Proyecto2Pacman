@@ -10,7 +10,6 @@ ApplicationManager::ApplicationManager() {
     this->createWindow();
     this->initGeneralBackground();
     this->initWindowState();
-
 }
 /**
  * @brief destructor for the class and releases the memory from the pointers
@@ -33,6 +32,7 @@ void ApplicationManager::run() {
         this->render();
     }
 }
+
 void ApplicationManager::endApp() {
     std::cout <<"Closing"<<"\n";
 }
@@ -81,6 +81,8 @@ void ApplicationManager::render() {
     if(!this->states->isEmpty()){ //checks if the stack is not empty
         this->states->peek()->stateRender(this->mainWindow);
     }
+
+
     //displays the content of the window
     this->mainWindow->display();
 }
@@ -107,15 +109,15 @@ void ApplicationManager::initWindowState() {
  * @brief draws the background for all windows
  */
 void ApplicationManager::renderBackgroundGeneral() {
-    //this->mainWindow->draw(this->generalBackGround);
+    this->mainWindow->draw(this->generalBackGround);
 }
 /**
  * @brief initiates the background texture and shape
  */
 void ApplicationManager::initGeneralBackground() {
-    //this->generalBackGround.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT)));
-    //if (!this->generalBackGroundTexture.loadFromFile("../Resources/Images/Pacman.jpg")){
-    //    exit(50);
-    //}
-    //this->generalBackGround.setTexture(&this->generalBackGroundTexture);
+    this->generalBackGround.setSize(sf::Vector2f(static_cast<float>(WINDOW_WIDTH),static_cast<float>(WINDOW_HEIGHT)));
+    if (!this->generalBackGroundTexture.loadFromFile("../Resources/Images/PacmanBG.jpg")){
+        exit(50);
+    }
+    this->generalBackGround.setTexture(&this->generalBackGroundTexture);
 }

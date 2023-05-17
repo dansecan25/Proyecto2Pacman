@@ -8,6 +8,7 @@
 #define WINDOW_HEIGHT 600
 
 #include "WindowState.h"
+#include "Socket.h"
 class ApplicationManager {
 
 private:
@@ -17,11 +18,13 @@ private:
     sf::Texture generalBackGroundTexture;
     sf::Clock dtClock;
     float dt;
+
     WindowStateStack* states;
     void createWindow();
     void initWindowState();
     void renderBackgroundGeneral();
     void initGeneralBackground();
+    Socket socket;
 
 public:
     ApplicationManager();

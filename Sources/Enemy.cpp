@@ -14,7 +14,12 @@ Enemy::Enemy(sf::RenderWindow *window, std::string name, bool alive, Cell *curre
 }
 
 void Enemy::rePosition(Cell* newCurrent) {
-    this->currentCell=newCurrent;
+    if(newCurrent!= nullptr){
+        this->currentCell->setObject("NONE");
+        this->currentCell=newCurrent;
+        this->currentCell->setObject(name);
+    }
+
 }
 
 void Enemy::render() {

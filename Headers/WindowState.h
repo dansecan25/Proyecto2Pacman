@@ -8,6 +8,8 @@
 #include "LevelData.h"
 #include "Enemy.h"
 #include <random>
+#include <thread>
+#include "Character.h"
 
 struct mousePositions{
     int posXi;
